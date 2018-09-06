@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/apps
+END
+AppList.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/apps/AppList.java
+END
+AppCreate.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/apps/AppCreate.java
+END
+AppDelete.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/apps/AppDelete.java
+END
+AppVersionAdd.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/apps/AppVersionAdd.java
+END
+AppUpdate.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/apps/AppUpdate.java
+END
+AppRead.java
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/apps/AppRead.java
+END
+AppPositionAdd.java
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/apps/AppPositionAdd.java
+END

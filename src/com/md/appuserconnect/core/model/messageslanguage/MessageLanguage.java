@@ -1,0 +1,130 @@
+package com.md.appuserconnect.core.model.messageslanguage;
+
+import java.io.Serializable;
+
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
+import org.json.JSONException;
+
+import com.google.appengine.api.datastore.Key;
+import com.md.appuserconnect.core.model.messages.Message;
+import com.md.appuserconnect.core.utils.JSONObject2;
+
+@SuppressWarnings("serial")
+@PersistenceCapable
+public class MessageLanguage implements Serializable{
+	
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	private Key id; 
+
+	@Persistent
+	private String messageID;
+
+	@Persistent
+	private String language     = "";
+
+	@Persistent
+	private String messageText  = ""; 
+
+	@Persistent
+	private String messageHeader = "";
+
+	@Persistent
+	private String button1Text  = "";	
+	
+	@Persistent
+	private String button2Text  = "";
+	
+	@Persistent
+	private String button3Text  = "";
+	
+	
+	public Key getId() {
+		return id; 
+	}
+
+	public void setId(Key id) {
+		this.id = id;
+	}
+
+	public MessageLanguage(String language, Message msg) {
+		this.language = language;
+		this.messageID  = msg.getMessageID();
+	}
+	
+	public String getMessageID() {
+		return messageID;
+	}
+
+	public void setMessageID(String messageID) {
+		this.messageID = messageID;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	public String getMessageText() {
+		return messageText;
+	}
+
+	public void setMessageText(String messageText) {
+		this.messageText = messageText;
+	}
+
+	public String getMessageTitle() {
+		return messageHeader;
+	}
+
+	public void setMessageTitle(String messageTitle) {
+		this.messageHeader = messageTitle;
+	}
+
+	public String getButton1Text() {
+		return button1Text;
+	}
+
+	public void setButton1Text(String button1Text) {
+		this.button1Text = button1Text;
+	}
+
+	public String getButton2Text() {
+		return button2Text;
+	}
+
+	public void setButton2Text(String button2Text) {
+		this.button2Text = button2Text;
+	}
+
+	public String getButton3Text() {
+		return button3Text;
+	}
+
+	public void setButton3Text(String button3Text) {
+		this.button3Text = button3Text;
+	}
+
+	public static JSONObject2 getAsJSONObject(MessageLanguage language) throws JSONException {
+		JSONObject2 json = new JSONObject2();
+		json.put("Language",        language.getLanguage());
+		json.put("MessageHeader",   language.getMessageTitle());
+		json.put("MessageText",     language.getMessageText());
+		json.put("Button1Text",     language.getButton1Text());
+		json.put("Button2Text",     language.getButton2Text());
+		json.put("Button3Text",     language.getButton3Text());
+		return json;
+	}
+	
+	
+	
+	
+	
+}

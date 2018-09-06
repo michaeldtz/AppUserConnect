@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/repos/!svn/ver/114/%5BWebApps%5D/AppUserConnect/war/WEB-INF
+END
+logging.properties
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/war/WEB-INF/logging.properties
+END
+appengine-web.xml
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/repos/!svn/ver/119/%5BWebApps%5D/AppUserConnect/war/WEB-INF/appengine-web.xml
+END
+datastore-indexes.xml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/repos/!svn/ver/115/%5BWebApps%5D/AppUserConnect/war/WEB-INF/datastore-indexes.xml
+END
+web.xml
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/repos/!svn/ver/115/%5BWebApps%5D/AppUserConnect/war/WEB-INF/web.xml
+END

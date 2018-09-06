@@ -1,0 +1,173 @@
+package com.md.homelessapps.qnotify.data.utils;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.logging.Logger;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.repackaged.org.json.JSONException;
+import com.google.appengine.repackaged.org.json.JSONObject;
+import com.md.homelessapps.qnotify.data.model.QNObjectManager;
+import com.md.homelessapps.qnotify.data.model.accounts.Account;
+import com.md.homelessapps.qnotify.data.model.accounts.AccountManager;
+
+public class RRServices {
+
+	private static final Logger log = Logger.getLogger(AccountManager.class.getName());
+
+	@SuppressWarnings("unchecked")
+	public static HashMap<String, Object> loadInputParameters(HttpServletRequest req, boolean dontCheckUser) {
+
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
+
+		// JSON Data
+		try {
+			JSONObject incoming = RRServices.request2SJSON(req);
+			String keys[] = JSONObject.getNames(incoming);
+
+			for (String key : keys) {
+				parameters.put(key.toLowerCase(), incoming.get(key));
+			}
+		} catch (JSONException e) {
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// URL Parameters
+		Enumeration<String> enu = req.getParameterNames();
+		while (enu.hasMoreElements()) {
+			String key = enu.nextElement();
+			parameters.put(key.toLowerCase(), req.getParameter(key));
+		}
+
+		if (!dontCheckUser) {
+			UserService userService = UserServiceFactory.getUserService();
+
+			if (!(userService.isUserLoggedIn() && userService.isUserAdmin())) {
+				parameters.remove("qnid");
+				Account account = QNObjectManager.getInstance().getAccMgr().getAccountOfUser();
+				if (account != null)
+					parameters.put("qnid", account.getQnid());
+			} else if (userService.isUserAdmin()) {
+				if (!parameters.containsKey("qnid")) {
+					Account account = QNObjectManager.getInstance().getAccMgr().getAccountOfUser();
+					if (account != null)
+						parameters.put("qnid", account.getQnid());
+				}
+			}
+		}
+
+		return parameters;
+	}
+
+	public static String request2String(HttpServletRequest request) throws IOException {
+
+		// Get Incoming JSON
+		BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
+		String string = "";
+		String line;
+		while ((line = br.readLine()) != null) {
+			string += line;
+		}
+		return string;
+	}
+
+	public static JSONObject request2SJSON(HttpServletRequest request) throws IOException, JSONException {
+		return new JSONObject(request2String(request));
+	}
+
+	public static void repsondErrorAsJSON(HttpServletResponse resp, String errorMessage) throws IOException {
+		RRServices.repsondErrorAsJSON(resp, errorMessage, 4);
+	}
+
+	public static void repsondErrorAsJSON(HttpServletResponse resp, String errorMessage, int errorCode) throws IOException {
+		resp.setContentType("text/plain");
+
+		try {
+			log.warning(errorMessage);
+
+			JSONObject json = new JSONObject();
+			json.put("Status", "E");
+			json.put("Error", errorMessage);
+			json.put("ErrorCode", new Integer(errorCode).toString());
+			resp.getWriter().println(json.toString());
+
+		} catch (JSONException e) {
+			log.severe("JSON Exception: " + e.toString());
+			resp.getWriter().println("JSON Exception: " + e.toString());
+		}
+
+	}
+
+	public static void repsondResultAsJSON(HttpServletResponse resp, String resultMessage) throws IOException {
+		resp.setContentType("text/plain");
+
+		try {
+			JSONObject json = new JSONObject();
+			json.put("Status", "S");
+			json.put("Result", resultMessage);
+			resp.getWriter().println(json.toString());
+
+		} catch (JSONException e) {
+			log.severe("JSON Exception: " + e.toString());
+			resp.getWriter().println("JSON Exception: " + e.toString());
+		}
+
+	}
+
+	public static boolean checkUserIsLoggedIn(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		UserService userService = UserServiceFactory.getUserService();
+
+		if (!userService.isUserLoggedIn()) {
+			resp.setStatus(403);
+			resp.setContentType("text/html");
+			RRServices.repsondErrorAsJSON(resp, "You are not logged", 11);
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean checkUserHasValidAccount(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+		if (!RRServices.checkUserIsLoggedIn(req, resp))
+			return false;
+
+		UserService userService = UserServiceFactory.getUserService();
+		Account account = QNObjectManager.getInstance().getAccMgr().getAccountOfUser();
+		if (!(userService.isUserLoggedIn() && account != null)) {
+			resp.setStatus(400);
+			RRServices.repsondErrorAsJSON(resp, "You are not logged in with a valid QN account", 12);
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean checkUserIsAdministrator(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		UserService userService = UserServiceFactory.getUserService();
+
+		if (!(userService.isUserLoggedIn() && userService.isUserAdmin())) {
+			resp.setStatus(400);
+			RRServices.repsondErrorAsJSON(resp, "Administration Rights Required", 13);
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean isUserIsAdministrator() {
+		UserService userService = UserServiceFactory.getUserService();
+
+		if (!(userService.isUserLoggedIn() && userService.isUserAdmin()))
+			return false;
+
+		return true;
+	}
+
+}

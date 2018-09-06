@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/repos/!svn/ver/114/%5BWebApps%5D/AppUserConnect/.settings
+END
+org.eclipse.wst.common.project.facet.core.xml
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/.settings/org.eclipse.wst.common.project.facet.core.xml
+END
+com.vaadin.integration.eclipse.prefs
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/repos/!svn/ver/115/%5BWebApps%5D/AppUserConnect/.settings/com.vaadin.integration.eclipse.prefs
+END
+org.eclipse.wst.common.component
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/repos/!svn/ver/105/%5BWebApps%5D/AppUserConnect/.settings/org.eclipse.wst.common.component
+END
+org.eclipse.jdt.core.prefs
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/.settings/org.eclipse.jdt.core.prefs
+END
+com.google.gdt.eclipse.core.prefs
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/.settings/com.google.gdt.eclipse.core.prefs
+END
+com.google.gwt.eclipse.core.prefs
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/.settings/com.google.gwt.eclipse.core.prefs
+END
+com.google.appengine.eclipse.core.prefs
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/repos/!svn/ver/114/%5BWebApps%5D/AppUserConnect/.settings/com.google.appengine.eclipse.core.prefs
+END
+org.eclipse.ltk.core.refactoring.prefs
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/.settings/org.eclipse.ltk.core.refactoring.prefs
+END

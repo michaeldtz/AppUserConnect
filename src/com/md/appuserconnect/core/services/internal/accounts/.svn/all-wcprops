@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/accounts
+END
+UserAccountCreate.java
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/accounts/UserAccountCreate.java
+END
+AccountCreate.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/accounts/AccountCreate.java
+END
+AccountDelete.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/accounts/AccountDelete.java
+END
+AccountUpdate.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/accounts/AccountUpdate.java
+END
+AccountRead.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/accounts/AccountRead.java
+END

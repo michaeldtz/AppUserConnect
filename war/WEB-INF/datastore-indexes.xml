@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<datastore-indexes autoGenerate='false'
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation='/Developer/Applications/Eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.5.2.r37v201107211953/appengine-java-sdk-1.5.2/docs/datastore-indexes.xsd'>
+	<datastore-index kind="Statistic" ancestor="false"
+		source="manual">
+		<property name="appbundle" direction="asc" />
+		<property name="qnid" direction="asc" />
+		<property name="date" direction="asc" />
+	</datastore-index>
+	<datastore-index kind="Statistic" ancestor="false"
+		source="manual">
+		<property name="qnid" direction="asc" />
+		<property name="date" direction="asc" />
+	</datastore-index>
+</datastore-indexes>	

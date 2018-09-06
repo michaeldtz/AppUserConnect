@@ -1,0 +1,16 @@
+package com.md.homelessapps.qnotify.data.utils;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
+
+import com.google.appengine.repackaged.org.json.JSONArray;
+
+public class JSONArray2 extends JSONArray {
+
+	public void sendAsRepsonse(HttpServletResponse resp) throws IOException {
+		resp.setContentType("text/plain");
+		resp.getWriter().println(this.toString());	
+	}
+
+}

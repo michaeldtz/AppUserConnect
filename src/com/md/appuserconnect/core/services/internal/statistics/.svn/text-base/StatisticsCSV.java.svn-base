@@ -1,0 +1,95 @@
+package com.md.homelessapps.qnotify.data.services.internal.statistics;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.md.homelessapps.qnotify.data.model.QNObjectManager;
+import com.md.homelessapps.qnotify.data.model.accounts.Account;
+import com.md.homelessapps.qnotify.data.model.statistics.Statistic;
+import com.md.homelessapps.qnotify.data.model.statistics.StatisticsManager;
+import com.md.homelessapps.qnotify.data.utils.RRServices;
+
+@SuppressWarnings("serial")
+public class StatisticsCSV extends HttpServlet {
+
+	private final String SEP = ",";
+
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+		if (RRServices.checkUserIsAdministrator(req, resp)) {
+			PrintWriter writ = resp.getWriter();
+
+			HashMap<String, Object> params = RRServices.loadInputParameters(req, false);
+			String action = (String) params.get("action");
+			String dateFrom = (String) params.get("datefrom");
+			String dateTo = (String) params.get("dateto");
+			String appBundle = (String) params.get("appbundle");
+			
+			if (action != null && action.equalsIgnoreCase("export")) {
+
+				Date fromDate = new Date((new Date().getTime()) - 1209600000);
+				if (dateFrom != null) {
+					try {
+						fromDate = StatisticsManager.convert2Date(dateFrom);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+
+				Date toDate = new Date();
+				if (dateTo != null) {
+					try {
+						toDate = StatisticsManager.convert2Date(dateTo);
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				StatisticsManager statManager = QNObjectManager.getInstance().getStaMgr();
+				Account acc = QNObjectManager.getInstance().getAccMgr().getAccountOfUser();
+				if (acc != null) {
+
+					Statistic stats[] = statManager.getStatistics(acc, fromDate, toDate, appBundle);
+
+					SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+
+					resp.setContentType("text/csv");
+
+					writ.println("Num" + SEP + "StatisticID" + SEP + "Date" + SEP + "ClientID" + SEP + "AppBundle" + SEP + "AppName" + SEP
+							+ "AppVersion" + SEP + "Country" + SEP + "Language" + SEP + "Position");
+					int counter = 1;
+					for (Statistic statistic : stats) {
+						writ.println(counter + SEP + statistic.getStaticticID() + SEP
+								+ dateFormat.format(new Date(new Long(statistic.getDate()).longValue() * 1000)) + SEP + statistic.getClientID() + SEP
+								+ statistic.getAppbundle() + SEP + statistic.getAppname() + SEP + statistic.getAppversion() + SEP
+								+ statistic.getCountryCode() + SEP + statistic.getLanguage() + SEP + statistic.getPosition());
+						counter++;
+					}
+				}
+			} else {
+				SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+				Date fromDate = new Date((new Date().getTime()) - 1209600000);
+				Date toDate = new Date();
+
+				resp.setContentType("text/html");
+
+				writ.println("<html><head><title>Load Statistics</title></head><body>");
+				writ.println("<form method='GET' action='csv.csv'><table>");
+				writ.println("<tr><td>From Date</td><td><input type='input' name='datefrom' value='" + dateFormat.format(fromDate) + "'/></td></tr>");
+				writ.println("<tr><td>To Date</td><td><input type='input' name='dateto' value='" + dateFormat.format(toDate) + "'/></td></tr>");
+				writ.println("<tr><td>AppBundle</td><td><input type='input' name='appbundle'/></td></tr>");
+				writ.println("</table>");
+				writ.println("<input type='hidden' name='action' value='export'/><input type='submit' value='select'/></form>");
+				writ.println("</body></html>");
+			}
+		}
+	}
+}

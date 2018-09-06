@@ -1,0 +1,36 @@
+package com.md.homelessapps.qnotify.data.services.internal.apps;
+
+import java.io.IOException;
+import java.util.HashMap;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.md.homelessapps.qnotify.data.model.QNObjectManager;
+import com.md.homelessapps.qnotify.data.model.apps.App;
+import com.md.homelessapps.qnotify.data.utils.RRServices;
+
+@SuppressWarnings("serial")
+public class AppList extends HttpServlet {
+
+	private QNObjectManager objmgr = QNObjectManager.getInstance();
+
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+		if (RRServices.checkUserHasValidAccount(req, resp)) {
+
+			HashMap<String, Object> params = RRServices.loadInputParameters(req, false);
+			String qnid = (String)params.get("qnid");
+
+			if (qnid != null) {
+				App[] apps = objmgr.getAppMgr().getAllAppsofQNID(qnid);
+				if (apps.length > 0)
+					App.sendArrayAsJSON(resp, apps);
+				else
+					RRServices.repsondErrorAsJSON(resp, "No apps found");
+			} else
+				RRServices.repsondErrorAsJSON(resp, "No parameters supplied");
+		}
+	}
+}

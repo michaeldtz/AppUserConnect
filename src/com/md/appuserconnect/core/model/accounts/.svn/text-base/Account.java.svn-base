@@ -1,0 +1,285 @@
+package com.md.homelessapps.qnotify.data.model.accounts;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
+
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+import javax.servlet.http.HttpServletResponse;
+
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.repackaged.org.json.JSONException;
+import com.md.homelessapps.qnotify.data.model.QNObjectManager;
+import com.md.homelessapps.qnotify.data.model.apps.App;
+import com.md.homelessapps.qnotify.data.model.messages.Message;
+import com.md.homelessapps.qnotify.data.utils.JSONObject2;
+import com.md.homelessapps.qnotify.data.utils.RRServices;
+
+@SuppressWarnings("serial")
+@PersistenceCapable
+public class Account implements Serializable {
+
+	@PrimaryKey
+	@Persistent
+	private Key qnid;
+
+	@Persistent
+	private String fullname = "";
+
+	@Persistent
+	private String nickname;
+
+	@Persistent
+	private String email;
+
+	@Persistent
+	private String dateCreated;
+
+	@Persistent
+	private String userType;
+
+	@Persistent
+	private String dateFormat = "dd.MM.yyyy";
+
+	@Persistent
+	private String timeFormat = "hh:mm:ss";
+
+	@Persistent
+	private String konaUser = "";
+
+	@Persistent
+	private String konaPass = "";
+
+	@Persistent
+	private String konaStat1ID = "";
+
+	@Persistent
+	private String konaStat2ID = "";
+
+	@Persistent
+	private String konaStat3ID = "";
+
+	@Persistent
+	private String konaStat4ID = "";
+
+	@Persistent
+	private String externalSeedMD5;
+
+	/*
+	 * Access Methods to Apps
+	 */
+	public App[] getApps() {
+		return QNObjectManager.getInstance().getAppMgr()
+				.getAllAppsofQNID(qnid.getName());
+	}
+
+	public Message[] getAllMessages() {
+		App[] apps = getApps();
+		ArrayList<Message> msgList = new ArrayList<Message>();
+		for (App app : apps) {
+			Message[] msgs = app.getMessages();
+			for (Message msg : msgs) {
+				msgList.add(msg);
+			}
+		}
+		return msgList.toArray(new Message[msgList.size()]);
+	}
+
+	public App createApp(String appBundleID, String appName) {
+		return QNObjectManager.getInstance().getAppMgr()
+				.createNewApp(qnid.getName(), appBundleID, appName);
+	}
+
+	/*
+	 * Getter Setter
+	 */
+	public String getQnid() {
+		return qnid.getName();
+	}
+
+	public String getCreatedOn() {
+		return "01.01.2011";
+	}
+
+	public void setQnid(String qnid) {
+		this.qnid = KeyFactory.createKey(Account.class.getSimpleName(), qnid);
+		// this.qnid = qnid;
+	}
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public String getFullname() {
+		return fullname;
+	}
+
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(String dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+	public String getExternalSeedMD5() {
+		return externalSeedMD5;
+	}
+
+	public void setExternalSeedMD5(String externalSeedMD5) {
+		this.externalSeedMD5 = externalSeedMD5;
+	}
+
+	public String getKonaUser() {
+		return konaUser;
+	}
+
+	public void setKonaUser(String konaUser) {
+		this.konaUser = konaUser;
+	}
+
+	public String getKonaPass() {
+		return konaPass;
+	}
+
+	public void setKonaPass(String konaPass) {
+		this.konaPass = konaPass;
+	}
+
+	public String getKonaStat1ID() {
+		return konaStat1ID;
+	}
+
+	public void setKonaStat1ID(String konaStat1ID) {
+		this.konaStat1ID = konaStat1ID;
+	}
+
+	public String getKonaStat2ID() {
+		return konaStat2ID;
+	}
+
+	public void setKonaStat2ID(String konaStat2ID) {
+		this.konaStat2ID = konaStat2ID;
+	}
+
+	public String getKonaStat3ID() {
+		return konaStat3ID;
+	}
+
+	public void setKonaStat3ID(String konaStat3ID) {
+		this.konaStat3ID = konaStat3ID;
+	}
+
+	public String getKonaStat4ID() {
+		return konaStat4ID;
+	}
+
+	public void setKonaStat4ID(String konaStat4ID) {
+		this.konaStat4ID = konaStat4ID;
+	}
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+
+	public String getDateFormat() {
+		return dateFormat;
+	}
+
+	public void setDateFormat(String dateFormat) {
+		this.dateFormat = dateFormat;
+	}
+
+	public String getTimeFormat() {
+		return timeFormat;
+	}
+
+	public void setTimeFormat(String timeFormat) {
+		this.timeFormat = timeFormat;
+	}
+	
+	public String getDateTimeFormat(){
+		return getDateFormat() + " " + getTimeFormat();
+	}
+
+	public String getDateAsString(Date date) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(getDateFormat());
+		return dateFormat.format(date);
+	}
+
+	public String getTimeAsString(Date date) {
+		SimpleDateFormat timeFormat = new SimpleDateFormat(getTimeFormat());
+		return timeFormat.format(date);
+	}
+
+	public String getDateAndTimeAsString(Date date) {
+		return getDateAsString(date) + " " + getTimeAsString(date);
+	}
+
+	public Date getDateFromDateString(String date, boolean endOfDay)
+			throws ParseException {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(getDateFormat()
+				+ "-hh:mm:ss");
+		if (endOfDay)
+			return dateFormat.parse(date + "-23:59:59");
+		else
+			return dateFormat.parse(date + "-00:00:00");
+	}
+
+	public Date getDateFromDateTimeString(String dateAndTime)
+			throws ParseException {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(getDateFormat()
+				+ " " + getTimeFormat());
+		return dateFormat.parse(dateAndTime);
+	}
+
+	/*
+	 * Sending as JSON Response
+	 */
+	public void sendAsJSON(HttpServletResponse resp) throws IOException {
+		try {
+			JSONObject2 json = new JSONObject2();
+			json.put("QNID", getQnid());
+			json.put("Email", getEmail());
+			json.put("Nickname", getNickname());
+			json.put("DateCreated", getDateCreated());
+
+			if (RRServices.isUserIsAdministrator())
+				json.put("Admin", "Yes");
+			else
+				json.put("Admin", "No");
+
+			json.sendAsRepsonse(resp);
+		} catch (JSONException e) {
+			RRServices.repsondErrorAsJSON(resp, e.toString());
+		}
+	}
+
+}

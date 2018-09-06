@@ -1,0 +1,143 @@
+package com.md.appuserconnect.core.model.delivery;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
+
+import com.md.appuserconnect.core.model.messages.Message;
+import com.md.appuserconnect.core.model.persistence.PMF;
+
+public class DeliveryManager {
+
+	public boolean willWeSendThisMessageToThisClient(String clientID,
+			Message message) {
+
+		Delivery deliveries[] = this.getDeliveriesOfClientAndMessage(clientID,
+				message.getMessageID());
+
+		int delayStart = new Double(message.getDelayedStart()).intValue();
+
+		if (deliveries.length < delayStart) {
+			didNotSendMessageToClient(clientID, message);
+			return false;
+		}
+
+		int repeats = new Double(message.getRepeatCount()).intValue();
+		
+		if (repeats < 0)
+			repeats = 1;
+
+		if (repeats == 0)
+			return true;
+		
+		repeats += delayStart;
+
+		if (deliveries.length < repeats)
+			return true;
+
+		return false;
+	}
+
+	public void didSendMessageToClient(String clientID, Message message) {
+		this.createDelivery(message.getMessageID(), clientID);
+	}
+
+	public void didNotSendMessageToClient(String clientID, Message message) {
+		this.createAntiDelivery(message.getMessageID(), clientID);
+	}
+
+	/**
+	 * Load all Deliveries of this message and client
+	 * 
+	 * @param qnid
+	 * @return
+	 */
+
+	@SuppressWarnings("unchecked")
+	public Delivery[] getDeliveriesOfClientAndMessage(String clientID,
+			String messageID) {
+
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Delivery[] deliveries = null;
+
+		try {
+			String queryStr = "SELECT FROM " + Delivery.class.getName();
+			queryStr += " WHERE clientID  == '" + clientID + "'";
+			queryStr += " &&    messageID == '" + messageID + "'";
+
+			Query query = pm.newQuery(queryStr);
+
+			List<Delivery> delList = (List<Delivery>) query.execute();
+			deliveries = delList.toArray(new Delivery[delList.size()]);
+
+			query.closeAll();
+		} finally {
+			pm.close();
+		}
+
+		return deliveries;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Delivery[] getDeliveriesOfMessage(String messageID) {
+
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Delivery[] deliveries = null;
+
+		try {
+			String queryStr = "SELECT FROM " + Delivery.class.getName();
+			queryStr += " WHERE messageID == '" + messageID + "'";
+
+			Query query = pm.newQuery(queryStr);
+
+			List<Delivery> delList = (List<Delivery>) query.execute();
+			deliveries = delList.toArray(new Delivery[delList.size()]);
+
+			query.closeAll();
+		} finally {
+			pm.close();
+		}
+
+		return deliveries;
+	}
+
+	private void createDelivery(String messageID, String clientID) {
+
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+
+		Delivery delivery = new Delivery();
+		delivery.setClientID(clientID);
+		delivery.setMessageID(messageID);
+		delivery.setDeliveryDate(new Long(new Date().getTime() / 1000)
+				.toString());
+
+		try {
+			pm.makePersistent(delivery);
+		} finally {
+			pm.flush();
+			pm.close();
+		}
+	}
+
+	private void createAntiDelivery(String messageID, String clientID) {
+
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+
+		Delivery delivery = new Delivery();
+		delivery.setClientID(clientID);
+		delivery.setMessageID(messageID);
+		delivery.setNoDelivery(true);
+		delivery.setDeliveryDate(new Long(new Date().getTime() / 1000)
+				.toString());
+
+		try {
+			pm.makePersistent(delivery);
+		} finally {
+			pm.flush();
+			pm.close();
+		}
+	}
+
+}

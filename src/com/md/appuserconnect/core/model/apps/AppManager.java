@@ -1,0 +1,196 @@
+package com.md.appuserconnect.core.model.apps;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
+
+import com.md.appuserconnect.core.model.QNObjectManager;
+import com.md.appuserconnect.core.model.messages.Message;
+import com.md.appuserconnect.core.model.persistence.PMF;
+import com.md.appuserconnect.core.utils.UUIDGenerator;
+
+public class AppManager {
+
+	/**
+	 * Get All Apps
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public App[] getAllApps() {
+
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		App[] apps = null;
+
+		try {
+			Query query = pm.newQuery(App.class);
+			List<App> appList = (List<App>) query.execute();
+			apps = appList.toArray(new App[appList.size()]);
+
+			query.closeAll();
+		} finally {
+			pm.close();
+		}
+
+		return apps;
+	}
+
+	/**
+	 * Get All Apps of QNID
+	 * 
+	 * @param qnid
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public App[] getAllAppsofQNID(String qnid) {
+
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		App[] apps = null;
+
+		try {
+			String queryStr = "SELECT FROM " + App.class.getName();
+			queryStr += " WHERE qnid == '" + qnid + "'";
+
+			Query query = pm.newQuery(queryStr);
+
+			List<App> appList = (List<App>) query.execute();
+			apps = appList.toArray(new App[appList.size()]);
+
+			query.closeAll();
+		} finally {
+			pm.close();
+		}
+
+		return apps;
+	}
+
+	/**
+	 * Get App by Bundle ID
+	 * 
+	 * @param appBundleID
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public App getAppByBundleID(String appBundleID) {
+
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		App app = null;
+
+		try {
+			String queryStr = "SELECT FROM " + App.class.getName();
+			queryStr += " WHERE appBundleID == '" + appBundleID + "'";
+
+			Query query = pm.newQuery(queryStr);
+			List<App> appList = (List<App>) query.execute();
+
+			if (!appList.isEmpty())
+				app = appList.get(0);
+
+			query.closeAll();
+		} finally {
+			pm.close();
+		}
+		return app;
+	}
+
+	/**
+	 * Get App By AppID
+	 * 
+	 * @param appID
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public App getAppByAppID(String appID) {
+
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		App app = null;
+
+		try {
+			String queryStr = "SELECT FROM " + App.class.getName();
+			queryStr += " WHERE appID == '" + appID + "'";
+
+			Query query = pm.newQuery(queryStr);
+			List<App> appList = (List<App>) query.execute();
+
+			if (!appList.isEmpty())
+				app = appList.get(0);
+
+			query.closeAll();
+		} finally {
+			pm.close();
+		}
+		return app;
+	}
+
+	/**
+	 * Create App
+	 * 
+	 * @param qnid
+	 * @param appBundleID
+	 * @param appName
+	 * @return
+	 */
+	public App createNewApp(String qnid, String appBundleID, String appName) {
+
+		if(getAppByBundleID(appBundleID) != null)
+			return null;
+		
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+
+		App app = new App();
+		app.setAppID(UUIDGenerator.getUUID());
+		app.setQnid(qnid);
+		app.setAppBundleID(appBundleID);
+		app.setAppName(appName);
+		app.setDateCreated(new Long(new Date().getTime() / 1000).toString());
+
+		try {
+			pm.makePersistent(app);
+		} finally {
+			pm.flush();
+			pm.close();
+		}
+		return app;
+	}
+
+	/**
+	 * Update
+	 * 
+	 * @param account
+	 */
+	public void updateApp(App app) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+
+		try {
+			pm.makePersistent(app);
+		} finally {
+			pm.flush();
+			pm.close();
+		}
+	}
+
+	/**
+	 * Delete App
+	 * 
+	 * @param app
+	 */
+	public void deleteApp(App app) {
+		
+		Message msgs[] = app.getMessages();
+		for(Message msg : msgs){
+			QNObjectManager.getInstance().getMsgMgr().deleteMessage(msg);
+		}
+		
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			App appToDel = (App) pm.getObjectById(App.class, app.getAppID());
+			pm.deletePersistent(appToDel);
+		} finally {
+			pm.close();
+		}
+	}
+
+
+}

@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/messages
+END
+MessageUpdate.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/messages/MessageUpdate.java
+END
+MessageList.java
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/messages/MessageList.java
+END
+MessageCreate.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/messages/MessageCreate.java
+END
+MessageDelete.java
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/repos/!svn/ver/101/%5BWebApps%5D/AppUserConnect/src/com/md/homelessapps/qnotify/data/services/internal/messages/MessageDelete.java
+END
