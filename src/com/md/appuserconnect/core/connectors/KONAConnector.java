@@ -13,8 +13,9 @@ import com.google.appengine.repackaged.com.google.common.util.Base64;
 public class KONAConnector {
 
 	String CRLF = "\r\n";
-	private String username = "mi.dietz@sap.com";
-	private String password = "walldorf45";
+	
+	private String username = ""; 
+	private String password = "";
 
 	public KONAConnector(String username, String password) {
 		super();
